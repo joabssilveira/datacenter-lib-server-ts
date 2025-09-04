@@ -45,9 +45,12 @@
     // `tsdx build` ignores this option, but it is commonly used when type-checking separately with `tsc`
     // "noEmit": true,
     "noEmit": false,
+    "diagnostics": true,
+    "experimentalDecorators": true,                   /* Enable experimental support for TC39 stage 2 draft decorators. */
+    "emitDecoratorMetadata": true,                    /* Emit design-type metadata for decorated declarations in source files. */
 
     "outDir": "./dist/cjs",
     "declarationDir": "./dist/types",
-    "target": "es2021",
+    "target": "es2020",
   }
 }
