@@ -55,11 +55,11 @@ export abstract class DatacenterAuthBaseDataSource<T extends object, ModelType> 
     return super.overrideCreateMasterOptions(options)
   }
   overrideCreateChildrenOptions(options: IDatacenterAuthBaseCreateOptions<any>) {
-    options.checkAuthorization = false
+    options.skipAuthorization = true
     return super.overrideCreateChildrenOptions(options)
   }
   overrideCreateChildOptions(options: IDatacenterAuthBaseCreateOptions<any>) {
-    options.checkAuthorization = false
+    options.skipAuthorization = true
     return super.overrideCreateChildOptions(options)
   }
 
@@ -67,16 +67,16 @@ export abstract class DatacenterAuthBaseDataSource<T extends object, ModelType> 
     return super.overrideBulkCreateMasterOptions(options)
   }
   overrideBulkCreateChildrenOptions(options: IDatacenterAuthBaseBulkCreateOptions<any>) {
-    options.checkAuthorization = false
+    options.skipAuthorization = true
     return super.overrideBulkCreateChildrenOptions(options)
   }
   overrideBulkCreateChildOptions(options: IDatacenterAuthBaseBulkCreateOptions<any>) {
-    options.checkAuthorization = false
+    options.skipAuthorization = true
     return super.overrideBulkCreateChildOptions(options)
   }
 
   async bulkCreate(options: IDatacenterAuthBaseBulkCreateOptions<T>): Promise<T[] | undefined> {
-    if (options.checkAuthorization) {
+    if (!options.skipAuthorization) {
       const authOpt = getAuthorizationAttOptions(this)
       if (authOpt?.checkBulkCreate) {
         if (!await authOpt?.checkBulkCreate(options, this)) {
@@ -89,7 +89,7 @@ export abstract class DatacenterAuthBaseDataSource<T extends object, ModelType> 
   }
 
   async create(options: IDatacenterAuthBaseCreateOptions<T>): Promise<T | undefined> {
-    if (options.checkAuthorization) {
+    if (!options.skipAuthorization) {
       const authOpt = getAuthorizationAttOptions(this)
       if (authOpt?.checkCreate) {
         if (!await authOpt?.checkCreate(options, this)) {
@@ -102,7 +102,7 @@ export abstract class DatacenterAuthBaseDataSource<T extends object, ModelType> 
   }
 
   async read(options: IDatacenterAuthBaseGetOptions<T>): Promise<IDbGetResult<T[]> | undefined> {
-    if (options.checkAuthorization) {
+    if (!options.skipAuthorization) {
       const authOpt = getAuthorizationAttOptions(this)
       if (authOpt?.checkRead) {
         if (!await authOpt?.checkRead(options, this)) {
@@ -115,7 +115,7 @@ export abstract class DatacenterAuthBaseDataSource<T extends object, ModelType> 
   }
 
   async update(options: IDatacenterAuthBaseUpdateOptions<T>): Promise<T | undefined> {
-    if (options.checkAuthorization) {
+    if (!options.skipAuthorization) {
       const authOpt = getAuthorizationAttOptions(this)
       if (authOpt?.checkUpdate) {
         if (!await authOpt?.checkUpdate(options, this)) {
@@ -131,7 +131,7 @@ export abstract class DatacenterAuthBaseDataSource<T extends object, ModelType> 
   // isso porque ainda nao tem como checar autorizacao com where
   // async delete(options: IDbDatacenterDeleteByKeyOptions<any> | IDbDatacenterDeleteOptions<T>): Promise<number> {
   async delete(options: IDatacenterAuthBaseDeleteByKeyOptions<any>): Promise<number> {
-    if (options.checkAuthorization) {
+    if (!options.skipAuthorization) {
       const authOpt = getAuthorizationAttOptions(this)
       if (authOpt?.checkDelete) {
         if (!await authOpt?.checkDelete(options, this)) {
