@@ -191,7 +191,6 @@ export class DatacenterAuthBaseDataSourceUtils {
     authToken: string,
     workgroupUuid: string,
     user: IUserSharedData,
-    // workgroupAuthKeys?: AuthorizationKeys[],
     workgroupAuthKeys?: AuthKeysType[],
   }): Promise<boolean> {
     const users_groupsDbRes = await new Users_GroupsApiClient({
@@ -234,7 +233,6 @@ export class DatacenterAuthBaseDataSourceUtils {
     authToken: string,
     legalPersonUuid: string,
     user: IUserSharedData,
-    // workgroupUnitsAuthKeys?: AuthorizationKeys[],
     workgroupUnitsAuthKeys?: AuthKeysType[],
   }): Promise<boolean> {
     const legalPersonsDsRes = await new LegalPersonsApiClient({
