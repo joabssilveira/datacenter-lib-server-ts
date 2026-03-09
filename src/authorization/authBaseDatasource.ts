@@ -77,10 +77,12 @@ export abstract class DatacenterAuthBaseDataSource<T extends object, ModelType> 
 
   async bulkCreate(options: IDatacenterAuthBaseBulkCreateOptions<T>): Promise<T[] | undefined> {
     if (!options.skipAuthorization) {
+      if (!options.baseDCenterApiUrl || !options.authToken || !options.authTokenData)
+        throw Error('Acesso negado!')
+
       const authOpt = getAuthorizationAttOptions(this)
       if (authOpt?.checkBulkCreate) {
         if (!await authOpt?.checkBulkCreate(options, this)) {
-          console.log(`Acesso negado (${this.collectionModel.tableName})`)
           throw Error('Acesso negado')
         }
       }
@@ -90,10 +92,12 @@ export abstract class DatacenterAuthBaseDataSource<T extends object, ModelType> 
 
   async create(options: IDatacenterAuthBaseCreateOptions<T>): Promise<T | undefined> {
     if (!options.skipAuthorization) {
+      if (!options.baseDCenterApiUrl || !options.authToken || !options.authTokenData)
+        throw Error('Acesso negado!')
+
       const authOpt = getAuthorizationAttOptions(this)
       if (authOpt?.checkCreate) {
         if (!await authOpt?.checkCreate(options, this)) {
-          console.log(`Acesso negado (${this.collectionModel.tableName})`)
           throw Error('Acesso negado')
         }
       }
@@ -103,10 +107,12 @@ export abstract class DatacenterAuthBaseDataSource<T extends object, ModelType> 
 
   async read(options: IDatacenterAuthBaseGetOptions<T>): Promise<IDbGetResult<T[]> | undefined> {
     if (!options.skipAuthorization) {
+      if (!options.baseDCenterApiUrl || !options.authToken || !options.authTokenData)
+        throw Error('Acesso negado!')
+
       const authOpt = getAuthorizationAttOptions(this)
       if (authOpt?.checkRead) {
         if (!await authOpt?.checkRead(options, this)) {
-          console.log(`Acesso negado (${this.collectionModel.tableName})`)
           throw Error('Acesso negado')
         }
       }
@@ -116,10 +122,12 @@ export abstract class DatacenterAuthBaseDataSource<T extends object, ModelType> 
 
   async update(options: IDatacenterAuthBaseUpdateOptions<T>): Promise<T | undefined> {
     if (!options.skipAuthorization) {
+      if (!options.baseDCenterApiUrl || !options.authToken || !options.authTokenData)
+        throw Error('Acesso negado!')
+
       const authOpt = getAuthorizationAttOptions(this)
       if (authOpt?.checkUpdate) {
         if (!await authOpt?.checkUpdate(options, this)) {
-          console.log(`Acesso negado (${this.collectionModel.tableName})`)
           throw Error('Acesso negado')
         }
       }
@@ -132,10 +140,12 @@ export abstract class DatacenterAuthBaseDataSource<T extends object, ModelType> 
   // async delete(options: IDbDatacenterDeleteByKeyOptions<any> | IDbDatacenterDeleteOptions<T>): Promise<number> {
   async delete(options: IDatacenterAuthBaseDeleteByKeyOptions<any>): Promise<number> {
     if (!options.skipAuthorization) {
+      if (!options.baseDCenterApiUrl || !options.authToken || !options.authTokenData)
+        throw Error('Acesso negado!')
+      
       const authOpt = getAuthorizationAttOptions(this)
       if (authOpt?.checkDelete) {
         if (!await authOpt?.checkDelete(options, this)) {
-          console.log(`Acesso negado (${this.collectionModel.tableName})`)
           throw Error('Acesso negado')
         }
       }
