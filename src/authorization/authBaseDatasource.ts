@@ -3,6 +3,7 @@ import { ModelDefined } from 'sequelize';
 import { getAuthorizationAttOptions } from './authorizationTypes';
 import { IDatacenterAuthBaseBulkCreateOptions, IDatacenterAuthBaseCreateOptions, IDatacenterAuthBaseDeleteByKeyOptions, 
   IDatacenterAuthBaseDeleteOptions, IDatacenterAuthBaseGetOptions, IDatacenterAuthBaseUpdateOptions } from './crudOptions';
+import { DatacenterCrudAuthTypes } from 'datacenter-lib-common-ts';
 
 export abstract class DatacenterAuthBaseDataSource<T extends object, ModelType> extends SequelizeDataSource<T> {
   models: ModelType
@@ -55,11 +56,15 @@ export abstract class DatacenterAuthBaseDataSource<T extends object, ModelType> 
     return super.overrideCreateMasterOptions(options)
   }
   overrideCreateChildrenOptions(options: IDatacenterAuthBaseCreateOptions<any>) {
-    options.skipAuthorization = true
+    options.crudAuth = {
+      type: DatacenterCrudAuthTypes.skip,
+    }
     return super.overrideCreateChildrenOptions(options)
   }
   overrideCreateChildOptions(options: IDatacenterAuthBaseCreateOptions<any>) {
-    options.skipAuthorization = true
+    options.crudAuth = {
+      type: DatacenterCrudAuthTypes.skip,
+    }
     return super.overrideCreateChildOptions(options)
   }
 
@@ -67,17 +72,21 @@ export abstract class DatacenterAuthBaseDataSource<T extends object, ModelType> 
     return super.overrideBulkCreateMasterOptions(options)
   }
   overrideBulkCreateChildrenOptions(options: IDatacenterAuthBaseBulkCreateOptions<any>) {
-    options.skipAuthorization = true
+    options.crudAuth = {
+      type: DatacenterCrudAuthTypes.skip,
+    }
     return super.overrideBulkCreateChildrenOptions(options)
   }
   overrideBulkCreateChildOptions(options: IDatacenterAuthBaseBulkCreateOptions<any>) {
-    options.skipAuthorization = true
+    options.crudAuth = {
+      type: DatacenterCrudAuthTypes.skip,
+    }
     return super.overrideBulkCreateChildOptions(options)
   }
 
   async bulkCreate(options: IDatacenterAuthBaseBulkCreateOptions<T>): Promise<T[] | undefined> {
-    if (!options.skipAuthorization) {
-      if (!options.baseDCenterApiUrl || !options.authToken || !options.authTokenData)
+    if (options.crudAuth.type != DatacenterCrudAuthTypes.skip) {
+      if (!options.baseDCenterApiUrl || !options.authToken)
         throw Error('Acesso negado!')
 
       const authOpt = getAuthorizationAttOptions(this)
@@ -91,8 +100,8 @@ export abstract class DatacenterAuthBaseDataSource<T extends object, ModelType> 
   }
 
   async create(options: IDatacenterAuthBaseCreateOptions<T>): Promise<T | undefined> {
-    if (!options.skipAuthorization) {
-      if (!options.baseDCenterApiUrl || !options.authToken || !options.authTokenData)
+    if (options.crudAuth.type != DatacenterCrudAuthTypes.skip) {
+      if (!options.baseDCenterApiUrl || !options.authToken)
         throw Error('Acesso negado!')
 
       const authOpt = getAuthorizationAttOptions(this)
@@ -106,8 +115,8 @@ export abstract class DatacenterAuthBaseDataSource<T extends object, ModelType> 
   }
 
   async read(options: IDatacenterAuthBaseGetOptions<T>): Promise<IDbGetResult<T[]> | undefined> {
-    if (!options.skipAuthorization) {
-      if (!options.baseDCenterApiUrl || !options.authToken || !options.authTokenData)
+    if (options.crudAuth.type != DatacenterCrudAuthTypes.skip) {
+      if (!options.baseDCenterApiUrl || !options.authToken)
         throw Error('Acesso negado!')
 
       const authOpt = getAuthorizationAttOptions(this)
@@ -121,8 +130,8 @@ export abstract class DatacenterAuthBaseDataSource<T extends object, ModelType> 
   }
 
   async update(options: IDatacenterAuthBaseUpdateOptions<T>): Promise<T | undefined> {
-    if (!options.skipAuthorization) {
-      if (!options.baseDCenterApiUrl || !options.authToken || !options.authTokenData)
+    if (options.crudAuth.type != DatacenterCrudAuthTypes.skip) {
+      if (!options.baseDCenterApiUrl || !options.authToken)
         throw Error('Acesso negado!')
 
       const authOpt = getAuthorizationAttOptions(this)
@@ -139,8 +148,8 @@ export abstract class DatacenterAuthBaseDataSource<T extends object, ModelType> 
   // isso porque ainda nao tem como checar autorizacao com where
   // async delete(options: IDbDatacenterDeleteByKeyOptions<any> | IDbDatacenterDeleteOptions<T>): Promise<number> {
   async delete(options: IDatacenterAuthBaseDeleteByKeyOptions<any>): Promise<number> {
-    if (!options.skipAuthorization) {
-      if (!options.baseDCenterApiUrl || !options.authToken || !options.authTokenData)
+    if (options.crudAuth.type != DatacenterCrudAuthTypes.skip) {
+      if (!options.baseDCenterApiUrl || !options.authToken)
         throw Error('Acesso negado!')
       
       const authOpt = getAuthorizationAttOptions(this)
