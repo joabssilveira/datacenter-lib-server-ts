@@ -1,11 +1,6 @@
-import {
-  AuthorizationKeys, DatacenterCrudAuthTokenDataDefault,
-  DatacenterCrudAuthTokenDataIntegration, DatacenterCrudAuthTypes,
-  DatacenterCrudAuthUser,
-  getAgentUuidFromCrudAuth,
-  IntegrationClient_AuthorizationsApiClient, IntegrationClientsApiClient, IUser_Group, IUserSharedData,
-  LegalPersonsApiClient, Users_GroupsApiClient
-} from "datacenter-lib-common-ts";
+import { AuthorizationKeys, DatacenterCrudAuthTokenDataDefault, DatacenterCrudAuthTokenDataIntegration, DatacenterCrudAuthTypes, 
+  DatacenterCrudAuthUser, getAgentFromCrudAuth, IntegrationClient_AuthorizationsApiClient, IntegrationClientsApiClient, IUserGroup, 
+  IUserSharedData, LegalPersonsApiClient, Users_GroupsApiClient } from "datacenter-lib-common-ts";
 
 export const undefinedUser = {} as IUserSharedData
 
@@ -27,7 +22,7 @@ export class DatacenterAuthBaseDataSourceUtils {
       }).get({
         where: {
           // grupos do usuario
-          userUuid: getAgentUuidFromCrudAuth({ crudAuth: options.crudAuth as any }),
+          userUuid: getAgentFromCrudAuth({ crudAuth: options.crudAuth as any })?.uuid,
           // e que nao sao especificos de unidades
           'userGroup.workgroupUnitUuid': null,
           // e que nao sao especificos de unidades
@@ -43,7 +38,7 @@ export class DatacenterAuthBaseDataSourceUtils {
         }
       })
       if (apiRes?.data?.payload?.length)
-        result.push(...apiRes.data.payload.map((i: IUser_Group) => i.userGroup?.workgroupUuid))
+        result.push(...apiRes.data.payload.map((i: IUserGroup) => i.userGroup?.workgroupUuid))
     } else if (options.crudAuth.type == DatacenterCrudAuthTypes.tokenDataIntegration) {
       let apiRes = await new IntegrationClient_AuthorizationsApiClient({
         baseApiUrl: options.baseDCenterApiUrl,
@@ -62,8 +57,7 @@ export class DatacenterAuthBaseDataSourceUtils {
         }
       })
       if (apiRes?.data?.payload?.length)
-        result.push(...apiRes.data.payload.map(i => i.integrationClient?.workgroupUuid)
-          .filter((a): a is string => a != null))
+        result.push(...apiRes.data.payload.map(i => i.integrationClient?.workgroupUuid).filter((a): a is string => a != null))
     }
 
     const tmpSet = new Set(result)
@@ -88,7 +82,7 @@ export class DatacenterAuthBaseDataSourceUtils {
         baseApiUrl: options.baseDCenterApiUrl
       }).get({
         where: {
-          userUuid: getAgentUuidFromCrudAuth({ crudAuth: options.crudAuth as any }),
+          userUuid: getAgentFromCrudAuth({ crudAuth: options.crudAuth as any })?.uuid,
         },
         nested: 'userGroup',
         config: {
@@ -98,7 +92,7 @@ export class DatacenterAuthBaseDataSourceUtils {
         }
       })
       if (apiRes?.data?.payload?.length)
-        result.push(...apiRes.data.payload.map((i: IUser_Group) => i.userGroup?.workgroupUuid).filter((a): a is string => a != null))
+        result.push(...apiRes.data.payload.map((i: IUserGroup) => i.userGroup?.workgroupUuid).filter((a): a is string => a != null))
 
       const tmpSet = new Set(result)
       result = Array.from(tmpSet)
@@ -140,7 +134,7 @@ export class DatacenterAuthBaseDataSourceUtils {
       }).get({
         where: {
           // grupos do usuario
-          userUuid: getAgentUuidFromCrudAuth({ crudAuth: options.crudAuth as any }),
+          userUuid: getAgentFromCrudAuth({ crudAuth: options.crudAuth as any })?.uuid,
           'userGroup.authorizations.authorizationKey': {
             $in: options.authorizations
           }
@@ -212,7 +206,7 @@ export class DatacenterAuthBaseDataSourceUtils {
         baseApiUrl: options.baseDCenterApiUrl,
       }).get({
         where: {
-          userUuid: getAgentUuidFromCrudAuth({ crudAuth: options.crudAuth as any }),
+          userUuid: getAgentFromCrudAuth({ crudAuth: options.crudAuth as any })?.uuid,
         },
         nested: 'userGroup{workgroup{workgroupUnits}}',
         config: {
@@ -305,7 +299,7 @@ export class DatacenterAuthBaseDataSourceUtils {
         where: {
           $and: [
             // grupos de usuarios do usuario atual...
-            { userUuid: getAgentUuidFromCrudAuth({ crudAuth: options.crudAuth as any }), },
+            { userUuid: getAgentFromCrudAuth({ crudAuth: options.crudAuth as any })?.uuid, },
             // ...e que tenha permissao sysAdm, nao importa o grupo de trabalho nem a unidade
             { 'userGroup.authorizations.authorizationKey': AuthorizationKeys.sysAdm }
           ]
@@ -358,7 +352,7 @@ export class DatacenterAuthBaseDataSourceUtils {
         where: {
           $and: [
             // grupos de usuarios do usuario atual...
-            { userUuid: getAgentUuidFromCrudAuth({ crudAuth: options.crudAuth as any }), },
+            { userUuid: getAgentFromCrudAuth({ crudAuth: options.crudAuth as any })?.uuid, },
             {
               $or: [
                 // ...ou com permissao sysadm
@@ -455,7 +449,7 @@ export class DatacenterAuthBaseDataSourceUtils {
         where: {
           $and: [
             // grupos de usuarios do usuario atual...
-            { userUuid: getAgentUuidFromCrudAuth({ crudAuth: options.crudAuth as any }), },
+            { userUuid: getAgentFromCrudAuth({ crudAuth: options.crudAuth as any })?.uuid, },
             {
               $or: [
                 // ... ou com permissao sysadm
