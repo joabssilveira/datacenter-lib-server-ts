@@ -1,3 +1,12 @@
+/*
+* O PACOTE DATACENTER-LIB-SERVER-TS E DATACENTER-LIB-DAO-TS TEM A MESMA LOGICA NESSE ARQUIVO
+* A DIFERENCA ENTRE ELES É QUE O SERVER USA A API DO DATACENTER PRA OBTER OS DADOS 
+* ENQUANTO QUE O DAO VAI DIRETO NO BANCO DO DATACENTER
+* O SERVER DEVE SER USADO POR APIS SATELITES AO DATACENTER 
+* O DAO É USADO PELA PROPRIA API DO DATACENTER
+* QUALQUER ALTERACAO AQUI DEVE SER REPLICADA LA
+*/
+
 import { AuthorizationKeys, DatacenterCrudAuthTokenDataDefault, DatacenterCrudAuthTokenDataIntegration, DatacenterCrudAuthTypes, 
   DatacenterCrudAuthUser, getAgentFromCrudAuth, IntegrationClient_AuthorizationsApiClient, IntegrationClientsApiClient, IUserGroup, 
   IUserSharedData, LegalPersonsApiClient, Users_GroupsApiClient } from "datacenter-lib-common-ts";
@@ -25,7 +34,7 @@ export class DatacenterAuthBaseDataSourceUtils {
           userUuid: getAgentFromCrudAuth({ crudAuth: options.crudAuth as any })?.uuid,
           // e que nao sao especificos de unidades
           'userGroup.workgroupUnitUuid': null,
-          // e que nao sao especificos de unidades
+          // e que tem as autorizacoes solicitadas
           'userGroup.authorizations.authorizationKey': {
             $in: options.authorizations
           }

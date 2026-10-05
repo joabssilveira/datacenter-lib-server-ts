@@ -1,4 +1,13 @@
-import { IDbGetResult, SequelizeDataSource, ISequelizeRelationBelongsTo, ISequelizeRelationHasMany, ISequelizeRelationHasOne, SequelizeTransaction } from 'fwork-jsts-db';
+/*
+* O PACOTE DATACENTER-LIB-SERVER-TS E DATACENTER-LIB-DAO-TS TEM A MESMA LOGICA NESSE ARQUIVO
+* A DIFERENCA ENTRE ELES É QUE O SERVER USA A API DO DATACENTER PRA OBTER OS DADOS 
+* ENQUANTO QUE O DAO VAI DIRETO NO BANCO DO DATACENTER
+* O SERVER DEVE SER USADO POR APIS SATELITES AO DATACENTER 
+* O DAO É USADO PELA PROPRIA API DO DATACENTER
+* QUALQUER ALTERACAO AQUI DEVE SER REPLICADA LA
+*/
+
+import { IDbGetResult, SequelizeDataSource, ISequelizeRelationBelongsTo, ISequelizeRelationHasMany, ISequelizeRelationHasOne, SequelizeTransaction, WithoutSequelizeTimestamps } from 'fwork-jsts-db';
 import { ModelDefined } from 'sequelize';
 import { getAuthorizationAttOptions } from './authorizationTypes';
 import { IDatacenterAuthBaseBulkCreateOptions, IDatacenterAuthBaseCreateOptions, IDatacenterAuthBaseDeleteByKeyOptions, 
@@ -10,7 +19,7 @@ export abstract class DatacenterAuthBaseDataSource<T extends object, ModelType> 
 
   constructor(options: {
     models: ModelType,
-    collectionModel: ModelDefined<T, T>,
+    collectionModel: ModelDefined<T, T | WithoutSequelizeTimestamps<T>>,
     keyName: keyof T,
     transaction?: SequelizeTransaction | undefined,
     belongsTo?: ISequelizeRelationBelongsTo<any, any>[] | undefined
@@ -22,34 +31,34 @@ export abstract class DatacenterAuthBaseDataSource<T extends object, ModelType> 
   }
 
   onBeforeBulkCreate(options: IDatacenterAuthBaseBulkCreateOptions<T>): IDatacenterAuthBaseBulkCreateOptions<T> | Promise<IDatacenterAuthBaseBulkCreateOptions<T>> {
-    return options
+    return super.onBeforeBulkCreate(options) as any
   }
-  onAfterBulkCreate(_options: IDatacenterAuthBaseBulkCreateOptions<T>, _createdList?: T[] | undefined): void | Promise<void> {
-
+  onAfterBulkCreate(options: IDatacenterAuthBaseBulkCreateOptions<T>, createdList?: T[] | undefined): void | Promise<void> {
+    super.onAfterBulkCreate(options, createdList)
   }
   onBeforeCreate(options: IDatacenterAuthBaseCreateOptions<T>): IDatacenterAuthBaseCreateOptions<T> | Promise<IDatacenterAuthBaseCreateOptions<T>> {
-    return options
+    return super.onBeforeCreate(options) as any
   }
-  onAfterCreate(_options: IDatacenterAuthBaseCreateOptions<T>, _created?: T | undefined): void | Promise<void> {
-
+  onAfterCreate(options: IDatacenterAuthBaseCreateOptions<T>, created?: T | undefined): void | Promise<void> {
+    super.onAfterCreate(options, created)
   }
   onBeforeRead(options: IDatacenterAuthBaseGetOptions<T>): IDatacenterAuthBaseGetOptions<T> | Promise<IDatacenterAuthBaseGetOptions<T> | undefined> | undefined {
-    return options
+    return super.onBeforeRead(options) as any
   }
-  onAfterRead(_options: IDatacenterAuthBaseGetOptions<T> | undefined, _result?: IDbGetResult<T[]> | undefined): void | Promise<void> {
-
+  onAfterRead(options: IDatacenterAuthBaseGetOptions<T> | undefined, result?: IDbGetResult<T[]> | undefined): void | Promise<void> {
+    super.onAfterRead(options, result)
   }
   onBeforeUpdate(options: IDatacenterAuthBaseUpdateOptions<T>): IDatacenterAuthBaseUpdateOptions<T> | Promise<IDatacenterAuthBaseUpdateOptions<T>> {
-    return options
+    return super.onBeforeUpdate(options) as any
   }
-  onAfterUpdate(_options: IDatacenterAuthBaseUpdateOptions<T>, _result?: { modifiedCount: number } | undefined): void | Promise<void> {
-
+  onAfterUpdate(options: IDatacenterAuthBaseUpdateOptions<T>, result?: { modifiedCount: number } | undefined): void | Promise<void> {
+    super.onAfterUpdate(options, result)
   }
   onBeforeDelete(options: IDatacenterAuthBaseDeleteOptions<T> | IDatacenterAuthBaseDeleteByKeyOptions<any>): IDatacenterAuthBaseDeleteOptions<T> | IDatacenterAuthBaseDeleteByKeyOptions<any> | Promise<IDatacenterAuthBaseDeleteOptions<T> | IDatacenterAuthBaseDeleteByKeyOptions<any>> {
-    return options
+    return super.onBeforeDelete(options) as any
   }
-  onAfterDelete(_options: IDatacenterAuthBaseDeleteOptions<T> | IDatacenterAuthBaseDeleteByKeyOptions<any>, _result: number): void | Promise<void> {
-
+  onAfterDelete(options: IDatacenterAuthBaseDeleteOptions<T> | IDatacenterAuthBaseDeleteByKeyOptions<any>, result: number): void | Promise<void> {
+    super.onAfterDelete(options, result)
   }
 
   overrideCreateMasterOptions(options: IDatacenterAuthBaseCreateOptions<any>) {
