@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/joabssilveira/datacenter-lib-server-ts/compare/v1.0.20...v1.1.0) (2026-10-05)
+
+
+### Features
+
+* errors ([ff63ec5](https://github.com/joabssilveira/datacenter-lib-server-ts/commit/ff63ec51edb519fee685a19c8069a5b31404a960))
+* errors ([6e51edc](https://github.com/joabssilveira/datacenter-lib-server-ts/commit/6e51edca9d96a77e27fd789043ac606f616d1f76))
+
 ### [1.0.20](https://github.com/joabssilveira/datacenter-lib-server-ts/compare/v1.0.19...v1.0.20) (2026-09-21)
 
 ### [1.0.19](https://github.com/joabssilveira/datacenter-lib-server-ts/compare/v1.0.18...v1.0.19) (2026-09-17)
