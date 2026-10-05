@@ -1,5 +1,5 @@
 import { AuthenticationError, AuthorizationError } from "datacenter-lib-common-ts"
-import { NotFoundError } from "datacenter-lib-common-ts/src/errors"
+import { NotFoundError } from "datacenter-lib-common-ts"
 import { Response } from 'express'
 import { ValidationError } from "sequelize"
 
