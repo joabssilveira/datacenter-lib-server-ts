@@ -1,4 +1,4 @@
-import { AuthenticationError, AuthorizationError } from "datacenter-lib-common-ts"
+import { AuthenticationError, AuthorizationError, BadRequestError } from "datacenter-lib-common-ts"
 import { NotFoundError } from "datacenter-lib-common-ts"
 import { Response } from 'express'
 import { ValidationError } from "sequelize"
@@ -19,6 +19,9 @@ export function getError(options: {
 
   if (error instanceof ValidationError)
     return res.status(409).send(error.message ?? error)
+  
+  if (error instanceof BadRequestError)
+    return res.status(400).send(error.message ?? error)
 
   return res.status(500).send(error.message ?? error)
 }
